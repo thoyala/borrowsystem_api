@@ -12,10 +12,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){ // เพิ่ม
     $address=$data->address;
     $telephone=$data->telephone; 
     $username=$data->username;
-    $password=$data->password;
+    $password=md5($data->password);
+    $picture=$data->picture;
     //เขียน sql  เพื่อ insert ข้อมูล
-    $sql="INSERT INTO tbuser (name,address,telephone,username,password)
-        VALUES('$name','$address','$telephone','$username','$password') ";
+    $sql="INSERT INTO tbuser (name,address,telephone,username,password,picture)
+        VALUES('$name','$address','$telephone','$username','$password','$picture') ";
     $result=$mysqli->query($sql);
     if($result)
         exit(json_encode(["status"=>"insert success"]));
@@ -23,7 +24,25 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){ // เพิ่ม
         exit(json_encode(["status"=>"insert error"]));
 }
 if($_SERVER["REQUEST_METHOD"]=="PUT"){ // แก้ไข 
-
+    $data=json_decode(file_get_contents("php://input"));
+    $userid=$data->userid;
+    $name=$data->name;
+    $address=$data->address;
+    $telephone=$data->telephone; 
+    $username=$data->username;
+    $password=($data->password);
+    $newpassword=($data->newpassword);
+    // exit(json_encode($name . ' ' . $address . ' ' . $telephone . ' ' .
+    // $username . ' ' . $password . ' ' . $newpassword));
+    if ($newpassword!='')
+        $password=md5($newpassword);
+    $sql="UPDATE tbuser SET name='$name', address ='$address', 
+        telephone='$telephone', password='$password' WHERE userid='$userid'";
+        $result=$mysqli->query($sql);
+    if($result)
+        exit(json_encode(["status"=>"update success"]));
+    else
+        exit(json_encode(["status"=>"update error"]));
 }
 if($_SERVER["REQUEST_METHOD"]=="DELETE"){ // ลบ 
 
