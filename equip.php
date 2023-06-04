@@ -30,4 +30,33 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){ // เพิ่ม
         exit(json_encode(["status"=>"insert error"]));
 }
 
+if($_SERVER["REQUEST_METHOD"]=="PUT") {
+    $data=json_decode(file_get_contents("php://input"));
+    $equipid=$data->equipid;
+    $name=$data->name;
+    $detail=$data->detail;
+    $qty=$data->qty;
+    $picture=$data->picture;
+    $sql="UPDATE tbequip SET name='$name',
+    detail='$detail', qty='$qty',picture='$picture' 
+    WHERE equipid='$equipid' ";
+    $result=$mysqli->query($sql);
+    $mysqli->close();
+    if($result)
+        exit(json_encode(["status"=>"update success"]));
+    else
+        exit(json_encode(["status"=>"error"]));
+}
+
+if($_SERVER["REQUEST_METHOD"]=="DELETE"){
+    $equipid=$_GET["equipid"];
+    $sql="DELETE FROM tbequip WHERE equipid='$equipid'";
+    $result=$mysqli->query($sql);
+    $mysqli->close();
+    if($result)
+        exit(json_encode(["status"=>"delete success"]));
+    else
+        exit(json_encode(["status"=>"error"]));
+}
+
 ?>
