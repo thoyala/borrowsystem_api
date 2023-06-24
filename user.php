@@ -56,8 +56,14 @@ if($_SERVER["REQUEST_METHOD"]=="PUT"){ // แก้ไข
         exit(json_encode(["status"=>"update error"]));
 }
 if($_SERVER["REQUEST_METHOD"]=="DELETE"){ // ลบ 
-
+    $userid=$_GET["userid"];
+    $sql="DELETE FROM tbuser WHERE userid='$userid'";
+    $result=$mysqli->query($sql);
+    $mysqli->close();
+    if($result)
+        exit(json_encode(["status"=>"delete success"]));
+    else
+        exit(json_encode(["status"=>"error"]));
 }
-
 
 ?>
